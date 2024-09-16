@@ -1,0 +1,158 @@
+/* General Styles */
+body {
+    background-color: #daf7a6; /* Light green background */
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Main Container to hold inventory and game */
+#main-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Inventory Box Styles */
+#inventory-container {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 200px;
+    text-align: left;
+    margin-right: 20px;
+}
+
+/* Game Container */
+#game-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    position: relative;
+}
+
+/* Game Title */
+h1 {
+    color: #2c5d34; /* Dark green for title */
+    margin-bottom: 20px;
+}
+
+/* Button Styles */
+button {
+    background-color: #91c788; /* Light cozy green for buttons */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #78a76f; /* Slightly darker green on hover */
+}
+
+/* Upgrades & Ducks Section Titles */
+h2 {
+    color: #3d7042;
+    margin: 15px 0 10px;
+}
+
+/* Stats Display */
+p {
+    font-size: 16px;
+    color: #444;
+    margin: 5px 0;
+}
+
+/* Grass at the Bottom */
+.grass {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    background-image: url('https://i.imgur.com/waRebxr.png'); /* A sample grass straw image */
+    background-repeat: repeat-x;
+    background-position: bottom;
+}
+
+/* Village Container Styles */
+#village-container {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px; /* Match the width of other containers */
+    margin-left: 20px; /* Adjust margin if needed */
+    text-align: left; /* Align text to the left if needed */
+}
+
+/* Village Display Elements */
+#village-container p {
+    font-size: 16px;
+    color: #444;
+    margin: 5px 0;
+}
+
+#village-container button {
+    background-color: #91c788; /* Match button styles */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+#village-container button:hover {
+    background-color: #78a76f; /* Match button hover styles */
+}
+
+
+/* Add this CSS to your stylesheet */
+button.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+button {
+    position: relative;
+}
+
+/* Tooltip styling */
+button::after {
+    content: attr(data-cost);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    visibility: hidden;
+}
+
+button:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
