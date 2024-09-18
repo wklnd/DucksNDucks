@@ -67,45 +67,88 @@ const store = {
             name: 'Small hut',
             baseCost: 500,
             baseCostWood: 100,
-            costMultiplier: 1.6, // Each purchase increases the cost by 20%
-            livableSpace: 2, // 2 Ducks can live in the hut
+            baseCostMinerals: 50, // Add mineral cost
+            costMultiplier: 1.6,
+            livableSpace: 2,
             owned: 0,
             getCost() {
                 return Math.round(this.baseCost * Math.pow(this.costMultiplier, this.owned));
             },
+            getWoodCost() {
+                return Math.round(this.baseCostWood * Math.pow(this.costMultiplier, this.owned));
+            },
+            getMineralCost() {
+                return Math.round(this.baseCostMinerals * Math.pow(this.costMultiplier, this.owned));
+            },
             buy() {
                 const cost = this.getCost();
-                if (duckweed >= cost) {
+                const woodCost = this.getWoodCost();
+                const mineralCost = this.getMineralCost();
+                if (duckweed >= cost && wood >= woodCost && minerals >= mineralCost) {
                     duckweed -= cost;
+                    wood -= woodCost;
+                    minerals -= mineralCost;
                     this.owned += 1;
-                    duckweedPerSecond += this.perSecond;
                     updateUI();
+                } else {
+                    if (duckweed < cost) {
+                        logEvent(`Not enough duckweed to buy ${this.name}. Cost: ${cost}`);
+                    }
+                    if (wood < woodCost) {
+                        logEvent(`Not enough wood to buy ${this.name}. Cost: ${woodCost}`);
+                    }
+                    if (minerals < mineralCost) {
+                        logEvent(`Not enough minerals to buy ${this.name}. Cost: ${mineralCost}`);
+                    }
                 }
             }
         },
         {
-            name: 'Silo',
-            baseCost: 500,
-            costMultiplier: 1.4, // Each purchase increases the cost by 40%
-            perSecond: 0.0, // Doesnt produce duckweed, increases storage capacity
-            storageCapacityIncreaseMultiplier: 1.4,
+            name: 'Two story house',
+            baseCost: 1240,
+            baseCostWood: 200,
+            baseCostMinerals: 100, // Add mineral cost
+            costMultiplier: 1.93,
+            perSecond: 0.0,
+            storageCapacityIncreaseMultiplier: 1.0,
             owned: 0,
             getCost() {
                 return Math.round(this.baseCost * Math.pow(this.costMultiplier, this.owned));
             },
+            getWoodCost() {
+                return Math.round(this.baseCostWood * Math.pow(this.costMultiplier, this.owned));
+            },
+            getMineralCost() {
+                return Math.round(this.baseCostMinerals * Math.pow(this.costMultiplier, this.owned));
+            },
             buy() {
                 const cost = this.getCost();
-                if (duckweed >= cost) {
+                const woodCost = this.getWoodCost();
+                const mineralCost = this.getMineralCost();
+                if (duckweed >= cost && wood >= woodCost && minerals >= mineralCost) {
                     duckweed -= cost;
+                    wood -= woodCost;
+                    minerals -= mineralCost;
                     this.owned += 1;
-                    duckweedMaxStorage *= this.storageCapacityIncreaseMultiplier;
                     updateUI();
+                } else {
+                    if (duckweed < cost) {
+                        logEvent(`Not enough duckweed to buy ${this.name}. Cost: ${cost}`);
+                    }
+                    if (wood < woodCost) {
+                        logEvent(`Not enough wood to buy ${this.name}. Cost: ${woodCost}`);
+                    }
+                    if (minerals < mineralCost) {
+                        logEvent(`Not enough minerals to buy ${this.name}. Cost: ${mineralCost}`);
+                    }
                 }
             }
         },
         {
             name: 'Pasture - DONT TOUCH',
             baseCost: 1000,
+            baseCostWood: 300,
+            baseCostMinerals: 150, // Add mineral cost
             costMultiplier: 2.0,
             perSecond: 0.0,
             storageCapacityIncreaseMultiplier: 1.0,
@@ -114,13 +157,32 @@ const store = {
             getCost() {
                 return Math.round(this.baseCost * Math.pow(this.costMultiplier, this.owned));
             },
+            getWoodCost() {
+                return Math.round(this.baseCostWood * Math.pow(this.costMultiplier, this.owned));
+            },
+            getMineralCost() {
+                return Math.round(this.baseCostMinerals * Math.pow(this.costMultiplier, this.owned));
+            },
             buy() {
                 const cost = this.getCost();
-                if (duckweed >= cost) {
+                const woodCost = this.getWoodCost();
+                const mineralCost = this.getMineralCost();
+                if (duckweed >= cost && wood >= woodCost && minerals >= mineralCost) {
                     duckweed -= cost;
+                    wood -= woodCost;
+                    minerals -= mineralCost;
                     this.owned += 1;
-                    duckweedMaxStorage *= this.storageCapacityIncreaseMultiplier;
                     updateUI();
+                } else {
+                    if (duckweed < cost) {
+                        logEvent(`Not enough duckweed to buy ${this.name}. Cost: ${cost}`);
+                    }
+                    if (wood < woodCost) {
+                        logEvent(`Not enough wood to buy ${this.name}. Cost: ${woodCost}`);
+                    }
+                    if (minerals < mineralCost) {
+                        logEvent(`Not enough minerals to buy ${this.name}. Cost: ${mineralCost}`);
+                    }
                 }
             }
         }

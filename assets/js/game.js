@@ -7,20 +7,32 @@ let duckweedMaxStorage = 1000;  // Maximum amount of duckweed the player can hol
 let clickMultiplier = 1;  // Multiplier for click-based duckweed collection
 
 // Village stuff
-let ducks = 0; // Number of ducks in the village
-let duckweedPerDuck = 0.1; // Duckweed consumed per duck per second
-let maxDucks = 0; // Maxium ducks that live in the village (Upgrades such as Small hut increase this)
+
+
 let wood = 0;
 let minerals = 0; // Minerals found in the village
 let mineralsPerSecond = 0; // Minerals generated per second
 let mineralsMaxStorage = 1000; // Maximum amount of minerals the player can hold
-
 let farms = 0; // Example variable for requirements
+
+// Duck related stuff
+let ducks = 0; // Number of ducks in the village
+let duckweedPerDuck = 0.1; // Duckweed consumed per duck per second
+let maxDucks = 0; // Maxium ducks that live in the village (Upgrades such as Small hut increase this)
+let ducksMovedAway = 0; // Ducks that have moved away from the village due to lack of food
+let duckHappiness = 100; // Happiness of the ducks, if it reaches 0, ducks will move away // 100 is the max happiness and every duck 
+// starts with 100 happiness
+
+// Secrets ;)
+let unicorn = 0; // Unicorns should be able to be found after unlocking "something something"
 
 
 // Story 
 let story1UnlockedWood = false;
+let story1DuckMovedAway = false; 
 let story1Shown = false;
+let storyTenaraMapUnlocked = false; // Unlocks the Tenara map TBD
+
 
 const h3Elements = document.querySelectorAll('.upgrboost');
 
@@ -42,6 +54,17 @@ function refineDuckweed() {
         updateUI();
     }
 }
+
+
+function gatherWood() {
+    // Check if the player has unlocked the lumber mill
+    // If true, the lumber mill will gather wood automatically, 0.1 wood per second * number of lumber mills
+    if (store.buildings.find(u => u.name === 'Lumber Mill')?.owned > 0) {
+        wood += store.buildings.find(u => u.name === 'Lumber Mill')?.owned * 0.1;
+    }
+    
+}
+
 
 // Function to handle buying store upgrades
 function buyUpgrade(index) {
@@ -179,6 +202,8 @@ function logEvent(message) {
     logBox.scrollTop = logBox.scrollHeight;
 }
 
+
+// Redo this function to include more variables and more "randomness"
 function randomCheck() {
     // Determine if an event should occur (5% chance)
     if (Math.random() < 0.005) {
@@ -205,8 +230,9 @@ function getGameState() {
     };
 }
 
+// Function to handle the Story Line - This function should be redone to include more variables and more story events
 function storyLine() {
-    if(duckweedTotalOwned >= 100 && !story1UnlockedWood) {
+    if (duckweedTotalOwned >= 100 && !story1UnlockedWood) {
         story1UnlockedWood = true;
         logEvent('You have gathered enough duckweed to unlock the ability to refine duckweed into wood!');
     }
@@ -216,14 +242,49 @@ function storyLine() {
         logEvent('You have enough duckweed to attract new visitors to your village!');
     }
 
-    if (ducks > 0 && duckweed < 0){
-        logEvent('The ducks are starving...')
-        //ducks -= 1;
+    if (ducks > 0 && duckweed < duckweedPerDuck * ducks) {
+        logEvent('The ducks are starving...');
+        duckweedEaten(); // Ensure ducks consume what they can
+    }
+
+    if (ducksMovedAway > 0 && !story1DuckMovedAway) {
+        story1DuckMovedAway = true;
+        logEvent('Some ducks have moved away from the village due to lack of food...');
+    }
+}
+
+// Function to handle ducks moving away from the village
+function duckMovedAwayFunc() {
+    ducksMovedAway += 1;
+    ducks -= 1;
+}
+// Function for ducks to move into the village (if there is space)
+function duckMovedIn() {
+    if (ducks < maxDucks) {
+        ducks += 1;
+    }
+    else {
+        const duckGender = Math.random() < 0.5 ? 'he' : 'she';
+        const possessivePronoun = duckGender === 'he' ? 'him' : 'her';
+        const message = `A duck has come to the village, but there was no room for ${possessivePronoun}. ${duckGender.charAt(0).toUpperCase() + duckGender.slice(1)} left...`;
+        logEvent(message);
+        
+        
+    }
+}
+
+// Function for ducks to eat duckweed, @TODO: add a happiness variable to ducks and make them leave if they are unhappy
+function duckweedEaten() {
+    if (duckweed >= duckweedPerDuck * ducks) {
+        duckweed -= duckweedPerDuck * ducks;
+    }
+    else {
+        logEvent('The ducks are starving...');
     }
 }
 
 
-// Main game loop (runs every second)
+// Main game loop (runs every second) // redefine this function
 function gameLoop() {
     if (duckweed + duckweedPerSecond <= duckweedMaxStorage) {
         duckweed += duckweedPerSecond;  // Auto-gather duckweed per second
@@ -234,6 +295,7 @@ function gameLoop() {
     updateUI();  // Update the UI
     storyLine(); // Check if a story event should occur
     randomCheck(); // Check if a random event should occur
+    duckweedEaten();
 }
 
 // Start the game loop
